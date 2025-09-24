@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# virtualenv / venv
+.venv/
+venv/
+env/
+ENV/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Data / outputs / logs
+data/
+b3pulse-etl/data/
+outputs/
+outputs/*
+*.parquet
+*.zip
+
+# Secrets and env
+.env
+*.env
+src/openai_integration.py
+openai_integration.py
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python packaging
+dist/
+build/
+*.egg-info/
+
+# Git LFS placeholders (if you ever use LFS)
+*.lfs
+PY
