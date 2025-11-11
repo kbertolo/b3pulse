@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 scripts/compare_years_and_summarize.py
 Comparar duas bases COTAHIST (zip ou parquet) e gerar resumo via OpenAI.
@@ -163,6 +162,7 @@ def main():
     parser.add_argument("--min_volume", type=float, default=100)
     args = parser.parse_args()
 
+    # leitura do arquivo A e B
     print("Lendo", args.pathA)
     sA = read_parquet_or_zip(args.pathA)
     print("Lendo", args.pathB)
@@ -181,6 +181,7 @@ def main():
     statsA = statsA.rename(columns=lambda c: c if c == "CODNEG" else f"{c}_{args.labelA}")
     statsB = statsB.rename(columns=lambda c: c if c == "CODNEG" else f"{c}_{args.labelB}")
 
+    # comparando as estatísticas
     comp = compare_stats(statsA, statsB, labelA=args.labelA, labelB=args.labelB)
 
     # save comparison CSV
@@ -201,7 +202,14 @@ def main():
 
     print("Chamando OpenAI para analisar diferenças...")
     try:
-        ai_text = analyze(prompt, model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo"), max_tokens=int(os.getenv("MAX_TOKENS","300")), save_raw_to=str(OUT / "compare_ai_raw.json"))
+        # dentro do meu try eu envio para o gpt
+        ai_text = analyze(
+            prompt, 
+            model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo"), 
+            max_tokens=int(os.getenv("MAX_TOKENS","300")), 
+            save_raw_to=str(OUT / "compare_ai_raw.json"))
+
+        # ja aqui eu recebo o seu retorno em txt 
         (OUT / "compare_ai_summary.txt").write_text(ai_text, encoding="utf-8")
         print("AI summary salvo em:", OUT / "compare_ai_summary.txt")
     except Exception as e:
